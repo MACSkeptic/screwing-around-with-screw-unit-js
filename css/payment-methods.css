@@ -15,9 +15,16 @@ h1 {
 }
 
 label.for_radio {
-  display: inline-block;
+  display: block;
   padding-left: 5px;
+  margin-left: 10px;
   clear: right;
+  width: 200px;
+  -moz-border-radius: 10px;
+}
+
+label.for_radio:hover {
+  background: #f1f1ff;
 }
 
 input[type="radio"] {

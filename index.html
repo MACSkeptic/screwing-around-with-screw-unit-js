@@ -11,6 +11,19 @@
   <body>
     <h1>Select your payment method</h1>
     <form id="payment_methods">
+        
+      <label for="radio_boleto" class="for_radio">
+        <input type="radio" id="radio_boleto" value="boleto" name="payment_method" />
+        Boleto
+      </label>
+        
+      <label for="radio_credit_card" class="for_radio">
+        <input type="radio" id="radio_credit_card" value="credit_card" name="payment_method" />
+        Credit Card
+      </label>
+      <fieldset id="fields_for_credit_card" class="hidden">
+      </fieldset>
+      <!--
       <fieldset id="fields_for_boleto">
         <input type="radio" id="radio_boleto" value="boleto" name="payment_method" />
         <label for="radio_boleto" class="for_radio">Boleto</label>
@@ -19,6 +32,7 @@
         <input type="radio" id="radio_credit_card" value="credit_card" name="payment_method" />
         <label for="radio_credit_card" class="for_radio">Credit Card</label>
       </fieldset>
+      -->
     </form>
   </body>
 </html>
