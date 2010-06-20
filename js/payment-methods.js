@@ -163,14 +163,17 @@ macskeptic.validator = (function () {
       secret.all[id] = secret.toArray(matchers);
     };
 
-    api.validate = function () {
-      $.each(secret.all, function (id, matchers) {
+    api.validate = function (id, desiredMatchers) {
+      if (id) {
+        var matchers = desiredMatchers || secret.all[id];
         $.each(matchers, function(i, matcher) {
           if (!dependencies.matchers[matcher](secret.val(id))) {
             dependencies.errors.add(id, dependencies.messages[matcher]);
           }
         });
-      });
+      } else {
+        $.each(secret.all, api.validate);
+      }
     };
   }());
 
