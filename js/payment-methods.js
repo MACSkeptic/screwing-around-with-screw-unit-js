@@ -16,9 +16,6 @@ macskeptic.doom = (function () {
   }());
 
   (function definePrivateMethods() {
-    secret.query = function (selector) {
-      return dependencies.query(selector);
-    };
   }());
 
   (function definePublicApi() {
@@ -28,8 +25,16 @@ macskeptic.doom = (function () {
       }
     };
 
+    api.query = function (selector) {
+      return dependencies.query(selector);
+    };
+
+    api.bind = function (selector, eventName, callback) {
+      api.query(selector).bind(eventName, callback);
+    };
+
     api.elementById = function  (id) {
-      return secret.query('#' + id);
+      return api.query('#' + id);
     };
 
     api.valueById = function (id) {
@@ -37,7 +42,7 @@ macskeptic.doom = (function () {
     };
 
     api.labelForId = function (id) {
-      return secret.query('label[for="'+id+'"]');
+      return api.query('label[for="'+id+'"]');
     };
 
     api.textOfLabelForId = function (id) {
@@ -87,20 +92,38 @@ macskeptic.errors = (function () {
 
   secret.all = {};
 
+  (function setupDefaultDependencies() {
+    dependencies.error = macskeptic.error; 
+  }());
+
   (function definePrivateMethods() {
   }());
 
   (function definePublicApi() {
+    api.customize = {
+      error: function (error) {
+        dependencies.error = error;
+      }
+    };
+
     api.on = function (id) {
-      return (secret.all[id] = secret.all[id] || []);
+      return secret.all[id] || api.clear(id);
+    };
+
+    api.haveOccurredOn = function (id) {
+      return api.on(id).length !== 0;
     };
 
     api.add = function (id, message) {
-      api.on(id).push(macskeptic.error.create(id, message));
+      api.on(id).push(dependencies.error.create(id, message));
     };
 
-    api.clear = function () {
-      secret.all = {};
+    api.clear = function (id) {
+      if (id) {
+        return (secret.all[id] = []);
+      } else {
+        secret.all = {};
+      }
     };
   }());
 
@@ -164,6 +187,12 @@ macskeptic.validator = (function () {
       },
       errors: function (errors) {
         dependencies.errors = errors;
+      },
+      matchers: function (matchers) {
+        dependencies.matchers = matchers;
+      },
+      messages: function (messagess) {
+        dependencies.messages = messages;
       }
     };
 
@@ -184,29 +213,50 @@ macskeptic.validator = (function () {
 }());
 
 macskeptic.paymentMethods = (function () {
-  var api = {}, secret = {};
+  var api = {}, secret = {}, dependencies = {};
+
+  (function setupDefaultDependencies() {
+    dependencies.validator = macskeptic.validator;
+    dependencies.doom = macskeptic.doom;
+  }());
 
   (function definePrivateMethods() {
     secret.setupEvents = function () {
-      $("input[name='payment_method']").bind('change', function () {
-        var that = $(this);
-        (that.val() === 'credit_card') ?
-          $("fieldset#fields_for_credit_card").slideDown() :
-          $("fieldset#fields_for_credit_card").slideUp();
+      dependencies.doom.bind("input[name='payment_method']", 'change', function () {
+        var that = dependencies.doom.query(this);
+        var element = dependencies.doom.elementById('fields_for_credit_card');
+        (that.val() === 'credit_card') ?  element.slideDown() : element.slideUp();
       });
+    };
+
+    secret.setupValidations = function () {
+      dependencies.validator.enlist('number', 'hasOnlyNumbers');
+      dependencies.validator.enlist('name', 'hasOnlyLettersAndSpaces');
     };
   }());
 
   (function definePublicApi() {
+    api.customize = {
+      validator: function (validator) {
+        dependencies.validator = validator;
+      },
+      doom: function (doom) {
+        dependencies.doom = doom;
+      }
+    };
+
     api.initialize = function () {
       secret.setupEvents();
+      secret.setupValidations();
     };
   }());
 
   return api;
 }());
 
+// this should be deleted
 $(function () {
   macskeptic.paymentMethods.initialize();
+  
   $("#radio_credit_card").attr("checked", "checked").trigger('change');
 });
