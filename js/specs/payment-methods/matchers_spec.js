@@ -94,15 +94,29 @@ Screw.Unit(function () {
 
     describe('#lengthIsAtLeast', function () {
       describe('when there is no content', function () {
-        it('should return false if a length > 0 is provided', function () {
+        it('should return false if a length greater than zero is provided', function () {
           expect(macskeptic.matchers.lengthIsAtLeast('', 1)).to(be_false);
           expect(macskeptic.matchers.lengthIsAtLeast('', 9042)).to(be_false);
         });
-        it('should return true if 0 or no length is provided', function () {
+        it('should return true if zero or no length is provided', function () {
           expect(macskeptic.matchers.lengthIsAtLeast('', 0)).to(be_true);
           expect(macskeptic.matchers.lengthIsAtLeast('', null)).to(be_true);
           expect(macskeptic.matchers.lengthIsAtLeast('', undefined)).to(be_true);
           expect(macskeptic.matchers.lengthIsAtLeast('')).to(be_true);
+        });
+      });
+      describe('when there is content', function () {
+        it('should return true if the length is greater than the provided minimum', function () {
+          expect(macskeptic.matchers.lengthIsAtLeast('123', 2)).to(be_true);
+          expect(macskeptic.matchers.lengthIsAtLeast('1231123123', 2)).to(be_true);
+        });
+        it('should return true if the length is equal to the provided minimum', function () {
+          expect(macskeptic.matchers.lengthIsAtLeast('123', 3)).to(be_true);
+          expect(macskeptic.matchers.lengthIsAtLeast('1', 1)).to(be_true);
+        });
+        it('should return false if the length is less than the provided minimum', function () {
+          expect(macskeptic.matchers.lengthIsAtLeast('1234', 5)).to(be_false);
+          expect(macskeptic.matchers.lengthIsAtLeast('112313425', 9042)).to(be_false);
         });
       });
     });
