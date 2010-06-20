@@ -101,6 +101,26 @@ macskeptic.errors = (function () {
   return api;
 }());
 
+macskeptic.matchers = (function () {
+  var api = {}, secret = {}, dependencies = {}; 
+
+  (function definePublicApi() {
+    api.hasOnlyNumbers = function (content) {
+      return /^\d+$/.test(content);
+    };
+
+    api.hasOnlyLetters = function (content) {
+      return /^[a-zA-Z]+$/.test(content);
+    };
+
+    api.hasOnlyLettersAndSpaces = function (content) {
+      return /^[a-zA-Z\s]+$/.test(content);
+    };
+  }());
+
+  return api;
+}());
+
 macskeptic.validators = (function () {
   var api = {}, secret = {}, dependencies = {}; 
 
@@ -119,26 +139,6 @@ macskeptic.validators = (function () {
       doom: function (doom) {
         dependencies.doom = doom;
       }
-    };
-  }());
-
-  return api;
-}());
-
-macskeptic.matchers = (function () {
-  var api = {}, secret = {}, dependencies = {}; 
-
-  (function definePublicApi() {
-    api.hasOnlyNumbers = function (content) {
-      return /^\d+$/.test(content);
-    };
-
-    api.hasOnlyLetters = function (content) {
-      return /^[a-zA-Z]+$/.test(content);
-    };
-
-    api.hasOnlyLettersAndSpaces = function (content) {
-      return /^[a-zA-Z\s]+$/.test(content);
     };
   }());
 
