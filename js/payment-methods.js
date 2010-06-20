@@ -43,6 +43,12 @@ macskeptic.doom = (function () {
     api.textOfLabelForId = function (id) {
       return api.labelForId(id).text();
     };
+
+    api.dataForId = function (id, key, value) {
+      return value ?
+        api.elementById(id).data(key, value) :
+        api.elementById(id).data(key);
+    };
   }());
 
   return api;
@@ -124,13 +130,22 @@ macskeptic.matchers = (function () {
 macskeptic.validators = (function () {
   var api = {}, secret = {}, dependencies = {}; 
 
+  secret.all = {};
+
   (function initializeDefaultDependencies() {
     dependencies.doom = macskeptic.doom;
+    dependencies.errors = macskeptic.errors;
+    dependencies.matchers = macskeptic.matchers;
+    dependencies.messages = macskeptic.messages;
   }());
 
   (function definePrivateMethods() {
     secret.val = function (id) {
       return dependencies.doom.valueById(id);
+    };
+
+    secret.toArray = function (o) {
+      return $.isArray(matchers) ? matchers : [matchers];
     };
   }());
 
@@ -138,7 +153,24 @@ macskeptic.validators = (function () {
     api.customize = {
       doom: function (doom) {
         dependencies.doom = doom;
+      },
+      errors: function (errors) {
+        dependencies.errors = errors;
       }
+    };
+
+    api.enlist = function (id, matchers)  {
+      secret.all[id] = secret.toArray(matchers);
+    };
+
+    api.validate = function () {
+      $.each(secret.all, function (id, matchers) {
+        $.each(matchers, function(i, matcher) {
+          if (!dependencies.matchers[matcher](secret.val(id))) {
+            dependencies.errors.add(id, dependencies.messages[matcher]);
+          }
+        });
+      });
     };
   }());
 
