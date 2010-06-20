@@ -32,10 +32,10 @@ macskeptic.error = (function () {
   var api = {}, secret = {}, dependencies = {};
 
   (function definePublicApi() {
-    api.create = function (params) {
+    api.create = function (id, message) {
       return {
-        on: params.on,
-        message: params.message
+        on: id,
+        message: message
       };
     };
   }());
@@ -56,10 +56,8 @@ macskeptic.errors = (function () {
       return (secret.all[id] = secret.all[id] || []);
     };
 
-    api.add = function (params) {
-      api.
-        on(params.id).
-        push(macskeptic.error.create(params));
+    api.add = function (id, message) {
+      api.on(id).push(macskeptic.error.create(id, message));
     };
 
     api.clear = function () {
@@ -80,10 +78,6 @@ macskeptic.validators = (function () {
   (function definePrivateMethods() {
     secret.val = function (id) {
       return dependencies.doom.valueById(id);
-    };
-
-    secret.test = function (id, regex) {
-      return regex.test(secret.val(id));
     };
   }());
 
