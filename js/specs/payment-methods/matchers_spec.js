@@ -1,5 +1,7 @@
 Screw.Unit(function () {
+
   describe('matchers', function () { 
+
     describe('#hasOnlyNumbers', function () {
       describe('when there are only numbers', function () {
         it('should return true', function () {
@@ -25,6 +27,7 @@ Screw.Unit(function () {
         });
       });  
     });
+
     describe('#hasOnlyLetters', function () {
       describe('when there are only letters', function () {
         it('should return true', function () {
@@ -51,6 +54,7 @@ Screw.Unit(function () {
         });
       });  
     });
+
     describe('#hasOnlyLettersAndSpaces', function () {
       describe('when there are only letters', function () {
         it('should return true', function () {
@@ -87,5 +91,22 @@ Screw.Unit(function () {
         });
       });  
     });
+
+    describe('#lengthIsAtLeast', function () {
+      describe('when there is no content', function () {
+        it('should return false if a length > 0 is provided', function () {
+          expect(macskeptic.matchers.lengthIsAtLeast('', 1)).to(be_false);
+          expect(macskeptic.matchers.lengthIsAtLeast('', 9042)).to(be_false);
+        });
+        it('should return true if 0 or no length is provided', function () {
+          expect(macskeptic.matchers.lengthIsAtLeast('', 0)).to(be_true);
+          expect(macskeptic.matchers.lengthIsAtLeast('', null)).to(be_true);
+          expect(macskeptic.matchers.lengthIsAtLeast('', undefined)).to(be_true);
+          expect(macskeptic.matchers.lengthIsAtLeast('')).to(be_true);
+        });
+      });
+    });
+
   });
+
 });

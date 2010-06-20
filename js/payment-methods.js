@@ -175,7 +175,7 @@ macskeptic.matchers = (function () {
     };
 
     api.lengthIsAtLeast = function (content, minimum) {
-      return content && content.length >= minimum;
+      return !minimum || (content && content.length >= minimum);
     };
   }());
 
