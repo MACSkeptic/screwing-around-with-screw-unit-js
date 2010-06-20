@@ -2,6 +2,14 @@
 
 var macskeptic = {awesomenessLevel: 9042};
 
+macskeptic.helpers = {
+  reduce: function (collection, seed, step) {
+    var result = seed;
+    $.each(collection, function (i, element) { result = step(result, element); });
+    return result;
+  }
+};
+
 macskeptic.messages = {
   hasOnlyLetters: 'must have only letters',
   hasOnlyNumbers: 'must have only numbers',
@@ -94,13 +102,22 @@ macskeptic.errors = (function () {
 
   (function setupDefaultDependencies() {
     dependencies.error = macskeptic.error; 
+    dependencies.helpers = macskeptic.helpers; 
   }());
 
   (function definePrivateMethods() {
+    secret.countAllErrors = function () {
+      return dependencies.helpers.reduce(secret.all, 0, function (sum, current) {
+        return sum + current.length;
+      });
+    };
   }());
 
   (function definePublicApi() {
     api.customize = {
+      helpers: function (helpers) {
+        dependencies.helpers = helpers;
+      },
       error: function (error) {
         dependencies.error = error;
       }
@@ -111,7 +128,15 @@ macskeptic.errors = (function () {
     };
 
     api.haveOccurredOn = function (id) {
-      return api.on(id).length !== 0;
+      return api.count(id) > 0;
+    };
+
+    api.haveOccurred = function (id) {
+      return api.haveOccurredOn(id);
+    };
+
+    api.count = function (id) {
+      return id ? api.on(id).length : secret.countAllErrors();
     };
 
     api.add = function (id, message) {
