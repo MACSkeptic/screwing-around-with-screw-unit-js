@@ -12,19 +12,33 @@
   <body>
     <h1>Select your payment method</h1>
     <form id="payment_methods">
-        
+
       <label for="radio_boleto" class="for_radio">
         <input type="radio" id="radio_boleto" value="boleto" name="payment_method" />
         Boleto
       </label>
-        
+
       <label for="radio_credit_card" class="for_radio">
         <input type="radio" id="radio_credit_card" value="credit_card" name="payment_method" />
         Credit Card
       </label>
       <fieldset id="fields_for_credit_card" class="hidden">
-        <label for="name">Name</label><input type="text" name="name" id="name"/>
-        <label for="number">Number</label><input type="text" name="number" id="number"/>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name"/>
+
+        <label for="number">Number</label>
+        <input type="text" name="number" id="number"/>
+
+        <label for="cvv">Security Code</label>
+        <input type="text" name="cvv" id="cvv"/>
+
+        <fieldset id="fields_for_expiration_date">
+          <label for="expiradion_month">Month</label>
+          <input type="text" name="expiration_month" id="expiration_month"/>
+
+          <label for="expiration_year">Year</label>
+          <input type="text" name="expiration_year" id="expiration_year"/>
+        </fieldset>
       </fieldset>
       <!--
       <fieldset id="fields_for_boleto">
