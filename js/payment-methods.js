@@ -28,6 +28,48 @@ macskeptic.doom = (function () {
   return api;
 }());
 
+macskeptic.error = (function () {
+  var api = {}, secret = {}, dependencies = {};
+
+  (function definePublicApi() {
+    api.create = function (params) {
+      return {
+        on: params.on,
+        message: params.message
+      };
+    };
+  }());
+
+  return api;
+}());
+
+macskeptic.errors = (function () {
+  var api = {}, secret = {}, dependencies = {};
+
+  secret.all = {};
+
+  (function definePrivateMethods() {
+  }());
+
+  (function definePublicApi() {
+    api.on = function (id) {
+      return (secret.all[id] = secret.all[id] || []);
+    };
+
+    api.add = function (params) {
+      api.
+        on(params.id).
+        push(macskeptic.error.create(params));
+    };
+
+    api.clear = function () {
+      secret.all = {};
+    };
+  }());
+
+  return api;
+}());
+
 macskeptic.validators = (function () {
   var api = {}, secret = {}, dependencies = {}; 
 
