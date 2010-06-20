@@ -13,7 +13,10 @@ macskeptic.helpers = {
 macskeptic.messages = {
   hasOnlyLetters: 'must have only letters',
   hasOnlyNumbers: 'must have only numbers',
-  hasOnlyLettersAndSpaces: 'must have only letters and spaces'
+  hasOnlyLettersAndSpaces: 'must have only letters and spaces',
+  lengthIsAtLeast: function (minimum) {
+    return 'must have at least ' + minimum + ' characters';
+  }
 };
 
 macskeptic.doom = (function () {
@@ -170,6 +173,10 @@ macskeptic.matchers = (function () {
     api.hasOnlyLettersAndSpaces = function (content) {
       return /^[a-zA-Z\s]+$/.test(content);
     };
+
+    api.lengthIsAtLeast = function (content, minimum) {
+      return content && content.length >= minimum;
+    };
   }());
 
   return api;
@@ -198,8 +205,11 @@ macskeptic.validator = (function () {
 
     secret.validateFieldByIdUsingMatcher = function (id, matcher) {
       $.each(matcher, function (name, customParameters) {
-        if (!dependencies.matchers[name](secret.val(id))) {
-          dependencies.errors.add(id, dependencies.messages[name]);
+        if (!dependencies.matchers[name](secret.val(id), customParameters)) {
+          var message = dependencies.messages[name];
+          dependencies.errors.add(
+            id, 
+            $.isFunction(message) ? message(customParameters) : message);
         }
       });
     };
@@ -268,7 +278,9 @@ macskeptic.paymentMethods = (function () {
 
     secret.setupValidations = function () {
       dependencies.validator.enlist('number', 'hasOnlyNumbers');
-      dependencies.validator.enlist('name', 'hasOnlyLettersAndSpaces');
+      dependencies.validator.enlist(
+        'name', 
+        ['hasOnlyLettersAndSpaces', {lengthIsAtLeast: 3} ]);
     };
   }());
 
