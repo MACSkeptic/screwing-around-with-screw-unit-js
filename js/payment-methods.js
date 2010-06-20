@@ -196,10 +196,22 @@ macskeptic.validator = (function () {
       return $.isArray(o) ? o : [o];
     };
 
+    secret.validateFieldByIdUsingMatcher = function (id, matcher) {
+      $.each(matcher, function (name, customParameters) {
+        if (!dependencies.matchers[name](secret.val(id))) {
+          dependencies.errors.add(id, dependencies.messages[name]);
+        }
+      });
+    };
+
     secret.validateFieldByIdUsingMatchers = function (id, matchers) {
       $.each(matchers ? secret.toArray(matchers) : secret.all[id], function(i, matcher) {
-        if (!dependencies.matchers[matcher](secret.val(id))) {
-          dependencies.errors.add(id, dependencies.messages[matcher]);
+        if ($.isPlainObject(matcher)) {
+          secret.validateFieldByIdUsingMatcher(id, matcher); 
+        } else {
+          var simpleMatcher = {};
+          simpleMatcher[matcher] = matcher;
+          secret.validateFieldByIdUsingMatcher(id, simpleMatcher); 
         }
       });
     };
@@ -282,6 +294,7 @@ macskeptic.paymentMethods = (function () {
 // this should be deleted
 $(function () {
   macskeptic.paymentMethods.initialize();
+  macskeptic.validator.validate();
   
   $("#radio_credit_card").attr("checked", "checked").trigger('change');
 });
