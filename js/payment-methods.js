@@ -147,6 +147,14 @@ macskeptic.validator = (function () {
     secret.toArray = function (o) {
       return $.isArray(o) ? o : [o];
     };
+
+    secret.validateFieldByIdUsingMatchers = function (id, matchers) {
+      $.each(matchers ? secret.toArray(matchers) : secret.all[id], function(i, matcher) {
+        if (!dependencies.matchers[matcher](secret.val(id))) {
+          dependencies.errors.add(id, dependencies.messages[matcher]);
+        }
+      });
+    };
   }());
 
   (function definePublicApi() {
@@ -163,14 +171,9 @@ macskeptic.validator = (function () {
       secret.all[id] = secret.toArray(matchers);
     };
 
-    api.validate = function (id, desiredMatchers) {
+    api.validate = function (id, matchers) {
       if (id) {
-        var matchers = desiredMatchers || secret.all[id];
-        $.each(matchers, function(i, matcher) {
-          if (!dependencies.matchers[matcher](secret.val(id))) {
-            dependencies.errors.add(id, dependencies.messages[matcher]);
-          }
-        });
+        secret.validateFieldByIdUsingMatchers(id, matchers); 
       } else {
         $.each(secret.all, api.validate);
       }
