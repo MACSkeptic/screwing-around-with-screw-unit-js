@@ -9,3 +9,10 @@ $(function () {
   });
   $("#radio_credit_card").attr("checked", "checked").trigger('change');
 });
+
+var macskeptic = {awesomenessLevel: 9042};
+macskeptic.paymentMethods = (function () {
+  var api = {}, secret = {};
+
+  return api;
+});
