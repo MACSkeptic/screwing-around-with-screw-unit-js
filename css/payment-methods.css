@@ -44,7 +44,7 @@ fieldset#fields_for_credit_card {
   margin: 5px 0 0 40px;
   padding: 30px 0 15px 0;
   display: block;
-  width: 360px;
+  width: 390px;
   position: relative;
   top: -27px;
   left: -30px;
@@ -77,7 +77,7 @@ fieldset input {
 fieldset#fields_for_credit_card input {
   clear: right;
   display: inline-block;
-  width: 230px;
+  width: 243px;
   margin: 10px 0 0 10px;
 }
 
@@ -86,19 +86,22 @@ fieldset#fields_for_credit_card input[name="cvv"] {
 }
 
 fieldset#fields_for_expiration_date {
-  display: block;
-  width: 290px;
-  margin: 5px 0 0 30px;
+  display: inline-block;
+  vertical-align: top;
+  width: 120px;
+  margin: 5px 0 0 10px;
   padding: 0 0 10px 0;
   border: none;
+  background: #e1e1ff;
 }
 
 fieldset#fields_for_expiration_date label {
-  width: auto;
+  width: 40px;
   margin: 5px 0 0 8px;
+  text-align: right;
   position: relative;
   top: -29px;
-  left: 70px;
+  left: 65px;
 }
 
 fieldset#fields_for_expiration_date input {
@@ -106,10 +109,12 @@ fieldset#fields_for_expiration_date input {
   margin: 10px 0 0 2px;
   position: relative;
   top: -29px;
-  left: 70px;
+  left: 65px;
 }
 
 fieldset#fields_for_expiration_date legend {
   display: inline-block;
-  padding: 7px 0 0 1px;
+  position: absolute;
+  width: auto;
+  padding: 6px 0 0 0px;
 }
