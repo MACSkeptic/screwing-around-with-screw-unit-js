@@ -2,6 +2,12 @@
 
 var macskeptic = {awesomenessLevel: 9042};
 
+macskeptic.messages = {
+  hasOnlyLetters: 'must have only letters',
+  hasOnlyNumbers: 'must have only numbers',
+  hasOnlyLettersAndSpaces: 'must have only letters and spaces'
+};
+
 macskeptic.doom = (function () {
   var api = {}, secret = {}, dependencies = {};
 
@@ -16,12 +22,26 @@ macskeptic.doom = (function () {
   }());
 
   (function definePublicApi() {
+    api.customize = {
+      query: function (query) {
+        dependencies.query = query;
+      }
+    };
+
     api.elementById = function  (id) {
       return secret.query('#' + id);
     };
 
     api.valueById = function (id) {
       return api.elementById(id).val();
+    };
+
+    api.labelForId = function (id) {
+      return secret.query('label[for="'+id+'"]');
+    };
+
+    api.textOfLabelForId = function (id) {
+      return api.labelForId(id).text();
     };
   }());
 
@@ -31,11 +51,24 @@ macskeptic.doom = (function () {
 macskeptic.error = (function () {
   var api = {}, secret = {}, dependencies = {};
 
+  (function initializeDefaultDependencies() {
+    dependencies.doom = macskeptic.doom;
+  }());
+
   (function definePublicApi() {
+    api.customize = {
+      doom: function (doom) {
+        dependencies.doom = doom;
+      }
+    };
+
     api.create = function (id, message) {
       return {
         on: id,
-        message: message
+        message: message,
+        description: function () {
+          return dependencies.doom.textOfLabelForId(id) + ' ' + message;
+        }
       };
     };
   }());
