@@ -163,15 +163,15 @@ macskeptic.matchers = (function () {
 
   (function definePublicApi() {
     api.hasOnlyNumbers = function (content) {
-      return /^\d+$/.test(content);
+      return !content || /^\d+$/.test(content);
     };
 
     api.hasOnlyLetters = function (content) {
-      return /^[a-zA-Z]+$/.test(content);
+      return !content || /^[a-zA-Z]+$/.test(content);
     };
 
     api.hasOnlyLettersAndSpaces = function (content) {
-      return /^[a-zA-Z\s]+$/.test(content);
+      return !content || /^[a-zA-Z\s]+$/.test(content);
     };
 
     api.lengthIsAtLeast = function (content, minimum) {
