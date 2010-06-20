@@ -127,7 +127,7 @@ macskeptic.matchers = (function () {
   return api;
 }());
 
-macskeptic.validators = (function () {
+macskeptic.validator = (function () {
   var api = {}, secret = {}, dependencies = {}; 
 
   secret.all = {};
@@ -145,7 +145,7 @@ macskeptic.validators = (function () {
     };
 
     secret.toArray = function (o) {
-      return $.isArray(matchers) ? matchers : [matchers];
+      return $.isArray(o) ? o : [o];
     };
   }());
 
