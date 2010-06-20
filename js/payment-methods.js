@@ -1,15 +1,5 @@
 "use strict";
 
-$(function () {
-  $("input[name='payment_method']").bind('change', function () {
-    var that = $(this);
-    (that.val() === 'credit_card') ?
-      $("fieldset#fields_for_credit_card").slideDown() :
-      $("fieldset#fields_for_credit_card").slideUp();
-  });
-  $("#radio_credit_card").attr("checked", "checked").trigger('change');
-});
-
 var macskeptic = {awesomenessLevel: 9042};
 
 macskeptic.doom = (function () {
@@ -61,17 +51,25 @@ macskeptic.validators = (function () {
         dependencies.doom = doom;
       }
     };
+  }());
 
-    api.numbersOnly = function (id) {
-      return secret.test(id, /^\d+$/);
+  return api;
+}());
+
+macskeptic.matchers = (function () {
+  var api = {}, secret = {}, dependencies = {}; 
+
+  (function definePublicApi() {
+    api.hasOnlyNumbers = function (content) {
+      return /^\d+$/.test(content);
     };
 
-    api.lettersOnly = function (id) {
-      return secret.test(id, /^[a-zA-Z]+$/);
+    api.hasOnlyLetters = function (content) {
+      return /^[a-zA-Z]+$/.test(content);
     };
 
-    api.lettersAndSpacesOnly = function (id) {
-      return secret.test(id, /^[a-zA-Z\s]+$/);
+    api.hasOnlyLettersAndSpaces = function (content) {
+      return /^[a-zA-Z\s]+$/.test(content);
     };
   }());
 
@@ -80,5 +78,28 @@ macskeptic.validators = (function () {
 
 macskeptic.paymentMethods = (function () {
   var api = {}, secret = {};
+
+  (function definePrivateMethods() {
+    secret.setupEvents = function () {
+      $("input[name='payment_method']").bind('change', function () {
+        var that = $(this);
+        (that.val() === 'credit_card') ?
+          $("fieldset#fields_for_credit_card").slideDown() :
+          $("fieldset#fields_for_credit_card").slideUp();
+      });
+    };
+  }());
+
+  (function definePublicApi() {
+    api.initialize = function () {
+      secret.setupEvents();
+    };
+  }());
+
   return api;
+}());
+
+$(function () {
+  macskeptic.paymentMethods.initialize();
+  $("#radio_credit_card").attr("checked", "checked").trigger('change');
 });
