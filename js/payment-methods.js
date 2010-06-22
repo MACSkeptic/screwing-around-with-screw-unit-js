@@ -130,12 +130,8 @@ macskeptic.errors = (function () {
       return secret.all[id] || api.clear(id);
     };
 
-    api.haveOccurredOn = function (id) {
+    api.hasOccurred = api.hasOccurredOn = api.haveOccurred = api.haveOccurredOn = function (id) {
       return api.count(id) > 0;
-    };
-
-    api.haveOccurred = function (id) {
-      return api.haveOccurredOn(id);
     };
 
     api.count = function (id) {
@@ -145,8 +141,8 @@ macskeptic.errors = (function () {
     api.add = function (id, message) {
       api.on(id).push(dependencies.error.create(id, message));
     };
-
-    api.clear = function (id) {
+  
+    api.clean = api.clear = function (id) {
       if (id) {
         return (secret.all[id] = []);
       } else {
