@@ -1,6 +1,6 @@
 Screw.Unit(function () {
   describe('error', function () {
-    var doomMock = mock(macskeptic.doom);
+    var doomMock = mock();
     var idOfError = 'fortyTwo';
     var messageOfError = 'how much is 9 times 7 ?';
     var createdError = null;
